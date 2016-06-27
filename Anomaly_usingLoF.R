@@ -2,6 +2,7 @@ rm(list=ls())
 Sys.setenv(TZ="Asia/Kolkata")
 library(xts)
 library(Rlof) 
+library(HighDimOut) # to normalize output scores
 
 normalizedata <- function(x){
   # function used to normalize data
@@ -25,7 +26,8 @@ outlierfactor <- function(daymat){
   daymat <- data.frame(x,y)
   
   df.lof2 <- lof(daymat,c(4:8),cores = 2) # apply LOF
-  df.lof2 <-apply(df.lof2,2,normalizedata) # nrormaization
+  #df.lof2 <-apply(df.lof2,2,normalizedata) # nrormaization
+  df_lof2 <- apply(df.lof2,2,function(x) Func.trans(x,method = "FBOD")) #normalise output scores
   anom_max <-  apply(df.lof2,1,function(x) round(max(x,na.rm = TRUE),2) ) #feature bagging for outlier detection
   return(anom_max)
 }
