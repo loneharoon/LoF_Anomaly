@@ -17,7 +17,7 @@ normalizedata <- function(x){
 
 outlierfactor <- function(daymat){
   daymat <- daymat[complete.cases(daymat),] # removes rows containing NAs
-  daymat1 <- as.xts(t(apply(daymat,1, function(x) abs(fft(x-mean(x)))^2/length(x))) ) #apply FFT
+  daymat1 <- as.xts(t(apply(daymat,1, function(x) abs(fft(x-mean(x))))) ) #apply FFT
   daymat <- daymat1
   dis_mat <- dist(daymat) # compute distance matrix
   fit <- cmdscale(dis_mat, eig = TRUE, k = 2) # apply MDS
@@ -25,7 +25,7 @@ outlierfactor <- function(daymat){
   y <- scale(fit$points[, 2])
   daymat <- data.frame(x,y)
   
-  df.lof2 <- lof(daymat,c(4:8),cores = 2) # apply LOF
+  df.lof2 <- lof(daymat,c(4:7),cores = 2) # apply LOF
   #df.lof2 <-apply(df.lof2,2,normalizedata) # nrormaization
   df_lof2 <- apply(df.lof2,2,function(x) Func.trans(x,method = "FBOD")) #normalise output scores
   anom_max <-  apply(df.lof2,1,function(x) round(max(x,na.rm = TRUE),2) ) #feature bagging for outlier detection
