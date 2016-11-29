@@ -1,7 +1,7 @@
 rm(list=ls())
 Sys.setenv(TZ="Asia/Kolkata")
-library(xts)
-library(Rlof) 
+library(xts)  # for operating on time series data
+library(Rlof) # for clustering 
 library(HighDimOut) # to normalize output scores
 
 normalizedata <- function(x){
